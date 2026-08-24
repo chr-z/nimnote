@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NimNote — instant-search notes</title>
+<meta name="description" content="Fast local notes with instant search. Core engine written in Nim, compiled to JavaScript. Free, offline, no signup.">
+<meta name="theme-color" content="#0b1220">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="assets/icons/icon.svg">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#search" data-i18n="a11y.skip">Skip to search</a>
+
+<header class="topbar">
+  <div class="brand">
+    <img src="assets/icons/icon.svg" alt="" width="30" height="30">
+    <div>
+      <strong>NimNote</strong>
+      <span class="tagline" data-i18n="brand.tagline">Think in notes.</span>
+    </div>
+  </div>
+  <div class="controls">
+    <select id="langSel" aria-label="Language / Idioma">
+      <option value="en">EN</option>
+      <option value="pt-BR">PT-BR</option>
+    </select>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <span class="badge-c">Nim → JavaScript · zero deps</span>
+    <h1 data-i18n="hero.title">Notes that find themselves.</h1>
+    <p data-i18n="hero.subtitle">Everything runs on your device: the search engine is Nim compiled to JavaScript, your notes never leave the browser, and the app works fully offline.</p>
+  </section>
+
+  <section class="card" aria-label="Search">
+    <div class="search-wrap">
+      <input id="q" type="text" autocomplete="off" spellcheck="false"
+             placeholder="Search…" data-i18n-attr="placeholder:ui.searchPlaceholder"
+             aria-label="Search notes">
+      <button id="clearQ" class="btn-clear" hidden aria-label="Clear search">&times;</button>
+    </div>
+    <div class="result-meta" id="meta"></div>
+  </section>
+
+  <section id="editorCard" class="card editor-card" hidden>
+    <div class="field">
+      <label for="eTitle" data-i18n="ui.title">Title</label>
+      <input id="eTitle" type="text" maxlength="120" placeholder="Title…" data-i18n-attr="placeholder:ui.titlePlaceholder">
+    </div>
+    <div class="field">
+      <label for="eBody" data-i18n="ui.note">Note</label>
+      <textarea id="eBody" rows="5" maxlength="20000" placeholder="Write anything…" data-i18n-attr="placeholder:ui.bodyPlaceholder"></textarea>
+    </div>
+    <div class="field">
+      <label for="eTags" data-i18n="ui.tags">Tags (comma separated)</label>
+      <input id="eTags" type="text" placeholder="work, ideas" data-i18n-attr="placeholder:ui.tagsPlaceholder">
+    </div>
+    <p class="form-error" id="formError" role="alert" hidden></p>
+    <div class="editor-actions">
+      <button id="saveBtn" class="btn-primary" data-i18n="ui.save">Save note</button>
+      <button id="cancelBtn" class="btn-ghost" data-i18n="ui.cancel">Cancel</button>
+    </div>
+  </section>
+
+  <section id="resultsCard" class="card" hidden>
+    <ul id="results" class="notes"></ul>
+    <p class="empty" id="emptyMsg" data-i18n="ui.noResults">Nothing here yet — write your first note above.</p>
+  </section>
+
+  <footer>
+    <span data-i18n="footer.note">Nim → JS engine · free, offline, no signup · built by @chr-z</span><br>
+    <code>engine/nncore.nim → js/nncore.js (<span id="engineVer">?</span>)</code>
+  </footer>
+</main>
+
+<script src="js/i18n.js"></script>
+<script src="js/nncore.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

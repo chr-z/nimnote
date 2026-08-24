@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Nim (JS backend)
+        run: |
+          curl -sL https://nim-lang.org/download/nim-2.2.4-linux_x64.tar.xz -o nim.tar.xz
+          tar xf nim.tar.xz
+          echo "$PWD/nim-2.2.4/bin" >> "$GITHUB_PATH"
+      - name: Build engine from Nim source
+        run: |
+          nim --version
+          npm run build:engine
+      - name: Verify the committed bundle is fresh and non-empty
+        run: |
+          test -s js/nncore.js || (echo "nncore.js missing" && exit 1)
+          grep -q "nn_api" js/nncore.js || (echo "bundle missing nn_api export" && exit 1)
+          echo "bundle ok ($(wc -c < js/nncore.js) bytes)"
+      - name: Run test suite (real Nim bundle + parity + i18n sync)
+        run: node --test tests/*.test.mjs
+      - name: Secret scan (no private keys committed)
+        run: |
+          ! grep -rInE '(BEGIN (RSA|EC|OPENSSH) PRIVATE KEY|ghp_[A-Za-z0-9]{36}|sk-[A-Za-z0-9]{20,})' . --exclude-dir=.git \
+            || (echo 'potential secret found' && exit 1)
+      - name: Validate JSON assets
+        run: |
+          node -e "JSON.parse(require('fs').readFileSync('manifest.json','utf8')); console.log('manifest ok')"
+          node -e "const i=JSON.parse(require('fs').readFileSync('locales/i18n.json','utf8')); const en=Object.keys(i.en).sort().join(); const pt=Object.keys(i['pt-BR']).sort().join(); if(en!==pt){console.error('locale key mismatch'); process.exit(1)} console.log('locales ok')"

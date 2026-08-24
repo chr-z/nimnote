@@ -1,0 +1,10 @@
+{
+  "name": "nimnote",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NimNote — instant-search notes. Core engine written in Nim, compiled to JavaScript with `nim js`. No runtime deps.",
+  "scripts": {
+    "build:engine": "nim js -d:release --out:js/nncore.js engine/nncore.nim",
+    "test": "node --test tests/*.test.mjs"
+  }
+}
