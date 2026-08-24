@@ -28,8 +28,8 @@ jobs:
       - name: Install Nim (JS backend)
         run: |
           curl -sL https://nim-lang.org/download/nim-2.2.4-linux_x64.tar.xz -o nim.tar.xz
-          tar xf nim.tar.xz
-          echo "$PWD/nim-2.2.4/bin" >> "$GITHUB_PATH"
+          sudo mkdir -p /opt/nimtoolchain && sudo tar xf nim.tar.xz -C /opt/nimtoolchain
+          echo "/opt/nimtoolchain/nim-2.2.4/bin" >> "$GITHUB_PATH"
       - name: Build engine from Nim source
         run: npm run build:engine
       - name: Run tests before publishing (real Nim bundle)
